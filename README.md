@@ -40,7 +40,7 @@ Implementation of Just-in-Time (JIT) privileged access to AWS using Microsoft En
 
 | Setting | Default | Range | Notes |
 |---------|---------|-------|-------|
-| AWS access portal session | 8 hours | 15 mins - 90 days | Controlled by IAM Identity Center |
+| AWS access portal session | 8 hours | 15 mins - 90 days | User interactive session |
 | Permission set session | 1 hour | 1 - 12 hours | Per permission set |
 | PIM activation duration | 8 hours | 30 mins - 24 hours | Per group |
 

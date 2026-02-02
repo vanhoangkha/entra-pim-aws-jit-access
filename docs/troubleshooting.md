@@ -1,5 +1,16 @@
 # Troubleshooting Guide
 
+## Debug SAML Assertions (from AWS Docs)
+
+To view SAML assertion details:
+1. Sign in to the AWS access portal
+2. Hold **Shift** key, click the application tile, release Shift
+3. View "You are now in administrator mode" page
+4. Choose **Copy XML** to save assertion for analysis
+5. Choose **Send to <application>** to continue
+
+> Note: Tested on Windows 10 with Firefox, Chrome, and Edge browsers.
+
 ## Common Issues
 
 ### 1. User không thấy Permission Set sau khi activate PIM
