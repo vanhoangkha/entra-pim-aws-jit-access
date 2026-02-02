@@ -1,0 +1,158 @@
+# =============================================================================
+# JIT Access Configuration
+# Copy this file to terraform.tfvars and customize
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# REQUIRED - Get these from IAM Identity Center Settings
+# -----------------------------------------------------------------------------
+
+identity_store_id = "d-1234567890"
+instance_arn      = "arn:aws:sso:::instance/ssoins-1234567890abcdef0"
+
+# -----------------------------------------------------------------------------
+# OPTIONAL - Features
+# -----------------------------------------------------------------------------
+
+aws_region                  = "us-east-1"
+create_permissions_boundary = true
+enable_monitoring           = false  # Set true and provide SNS topic for alerts
+
+# Uncomment to enable monitoring
+# alarm_sns_topic_arn       = "arn:aws:sns:us-east-1:111111111111:security-alerts"
+# cloudtrail_log_group_name = "aws-cloudtrail-logs"
+
+# -----------------------------------------------------------------------------
+# PERMISSION SETS
+# Session duration: PT1H to PT12H (1-12 hours)
+# -----------------------------------------------------------------------------
+
+permission_sets = {
+  "EC2AdminAccess" = {
+    description      = "EC2 Administrator Access for JIT"
+    session_duration = "PT1H"
+    managed_policies = ["arn:aws:iam::aws:policy/AmazonEC2FullAccess"]
+    inline_policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [{
+        Sid       = "DenyTerminateInstances"
+        Effect    = "Deny"
+        Action    = ["ec2:TerminateInstances"]
+        Resource  = "*"
+        Condition = { StringNotEquals = { "ec2:ResourceTag/Environment" = "development" } }
+      }]
+    })
+  }
+
+  "S3AdminAccess" = {
+    description      = "S3 Administrator Access for JIT"
+    session_duration = "PT1H"
+    managed_policies = ["arn:aws:iam::aws:policy/AmazonS3FullAccess"]
+    inline_policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [{
+        Sid      = "DenyBucketDeletion"
+        Effect   = "Deny"
+        Action   = ["s3:DeleteBucket"]
+        Resource = "*"
+      }]
+    })
+  }
+
+  "ReadOnlyAccess" = {
+    description      = "Read-Only Access for JIT"
+    session_duration = "PT4H"
+    managed_policies = ["arn:aws:iam::aws:policy/ReadOnlyAccess"]
+    # No inline_policy needed - defaults to ""
+  }
+
+  "DatabaseAdmin" = {
+    description      = "Database Administrator Access for JIT"
+    session_duration = "PT1H"
+    managed_policies = [
+      "arn:aws:iam::aws:policy/AmazonRDSFullAccess",
+      "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+    ]
+    inline_policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [{
+        Sid    = "DenyDatabaseDeletion"
+        Effect = "Deny"
+        Action = [
+          "rds:DeleteDBInstance",
+          "rds:DeleteDBCluster",
+          "dynamodb:DeleteTable"
+        ]
+        Resource = "*"
+      }]
+    })
+  }
+
+  "EmergencyAccess" = {
+    description      = "Emergency Break-Glass Access"
+    session_duration = "PT1H"
+    managed_policies = []
+    inline_policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [
+        {
+          Sid      = "EmergencyAccess"
+          Effect   = "Allow"
+          Action   = "*"
+          Resource = "*"
+          Condition = {
+            IpAddress = { "aws:SourceIp" = ["10.1.0.0/16", "10.2.0.0/16"] }
+            Bool      = { "aws:MultiFactorAuthPresent" = "true" }
+          }
+        },
+        {
+          Sid    = "DenyDestructiveActions"
+          Effect = "Deny"
+          Action = [
+            "organizations:LeaveOrganization",
+            "organizations:DeleteOrganization",
+            "account:CloseAccount"
+          ]
+          Resource = "*"
+        }
+      ]
+    })
+  }
+}
+
+# -----------------------------------------------------------------------------
+# GROUP ASSIGNMENTS
+# Group names must match exactly with Entra security groups
+# -----------------------------------------------------------------------------
+
+group_assignments = {
+  "ec2-admin" = {
+    group_name     = "AWS - Amazon EC2 Admin"
+    permission_set = "EC2AdminAccess"
+    account_ids    = ["111111111111", "222222222222"]
+  }
+
+  "s3-admin" = {
+    group_name     = "AWS - S3 Admin"
+    permission_set = "S3AdminAccess"
+    account_ids    = ["111111111111"]
+  }
+
+  "readonly" = {
+    group_name     = "AWS - ReadOnly"
+    permission_set = "ReadOnlyAccess"
+    account_ids    = ["111111111111", "222222222222", "333333333333"]
+  }
+
+  "db-admin" = {
+    group_name     = "AWS - Database Admin"
+    permission_set = "DatabaseAdmin"
+    account_ids    = ["111111111111"]
+  }
+
+  "emergency" = {
+    group_name     = "AWS - Emergency Access"
+    permission_set = "EmergencyAccess"
+    account_ids    = ["111111111111"]
+  }
+}
