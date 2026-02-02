@@ -1,6 +1,6 @@
-# Tạo Security Groups trong Microsoft Entra ID
+# Create Security Groups in Microsoft Entra ID
 
-Security groups đại diện cho các privilege levels mà users có thể request.
+Security groups represent privilege levels that users can request.
 
 ## Naming Convention
 
@@ -8,45 +8,46 @@ Security groups đại diện cho các privilege levels mà users có thể requ
 AWS - <Service/Role> <Access Level>
 ```
 
-Ví dụ:
+Examples:
 - `AWS - Amazon EC2 Admin`
 - `AWS - S3 ReadOnly`
 - `AWS - Production Admin`
 - `AWS - Database Admin`
 
-## Tạo Security Group
+## Create Security Group
 
-1. Đăng nhập [Microsoft Entra admin center](https://entra.microsoft.com/)
-2. **Groups > All groups > New group**
-3. Cấu hình:
+1. Sign in to [Microsoft Entra admin center](https://entra.microsoft.com/)
+2. **Groups → All groups → New group**
+3. Configure:
    - **Group type**: Security
    - **Group name**: `AWS - Amazon EC2 Admin`
    - **Group description**: `Amazon EC2 administrator permissions`
-   - **Membership type**: Assigned (bắt buộc cho PIM)
+   - **Membership type**: Assigned (required for PIM)
 4. **Create**
 
 ## Assign Group to Enterprise Application
 
-1. **Applications > Enterprise applications > AWS IAM Identity Center**
-2. **Users and groups > Add user/group**
-3. Chọn group vừa tạo
+1. **Applications → Enterprise applications → AWS IAM Identity Center**
+2. **Users and groups → Add user/group**
+3. Select the group you created
 4. **Assign**
 
 ## Start Provisioning
 
-1. **Provisioning > Start provisioning**
-2. Đợi initial sync hoàn tất (vài phút)
-3. Verify group xuất hiện trong IAM Identity Center
+1. **Provisioning → Start provisioning**
+2. Wait for initial sync to complete (few minutes)
+3. Verify group appears in IAM Identity Center
 
-## Lưu ý quan trọng
+## Important Constraints (from AWS Docs)
 
 | Constraint | Description |
 |------------|-------------|
-| Membership type | Phải là **Assigned**, không phải Dynamic |
-| Nested groups | Không được hỗ trợ với PIM |
-| AD-synced groups | Không được hỗ trợ với PIM |
+| Membership type | Must be **Assigned**, not Dynamic (for PIM) |
+| Nested groups | NOT supported - only immediate members are provisioned |
+| AD-synced groups | NOT supported with PIM |
+| Dynamic groups | Supported but don't flatten nested groups |
 
-## Ví dụ cấu trúc Groups
+## Example Group Structure
 
 ```
 AWS - Production Admin          → Full admin access to production
@@ -56,4 +57,13 @@ AWS - Database Admin            → RDS, DynamoDB admin
 AWS - Network Admin             → VPC, Route53, CloudFront admin
 AWS - Security Admin            → IAM, GuardDuty, Security Hub admin
 AWS - Billing ReadOnly          → Cost Explorer, Budgets read access
+AWS - Emergency Access          → Break-glass admin access
+```
+
+## Verify Groups Synced to AWS
+
+```bash
+aws identitystore list-groups \
+  --identity-store-id d-xxxxxxxxxx \
+  --query "Groups[].DisplayName"
 ```
