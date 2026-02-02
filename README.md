@@ -2,22 +2,20 @@
 
 Implementation of Just-in-Time (JIT) privileged access to AWS using Microsoft Entra Privileged Identity Management (PIM) integrated with AWS IAM Identity Center.
 
-## Overview
+## Architecture
 
-```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   User Request  │────▶│   Entra PIM     │────▶│  IAM Identity   │
-│   (Activate)    │     │  Group Assign   │     │     Center      │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-                              │                        │
-                              │ SCIM Sync              │ Permission Set
-                              │ (2-10 mins)            │ Assignment
-                              ▼                        ▼
-                        ┌─────────────────┐     ┌─────────────────┐
-                        │  Security Group │────▶│   AWS Account   │
-                        │  Membership     │     │     Access      │
-                        └─────────────────┘     └─────────────────┘
-```
+![JIT Access Architecture](diagrams/jit-access-architecture.png)
+
+### Additional Diagrams
+
+| Diagram | Description |
+|---------|-------------|
+| [Data Flow](diagrams/data-flow.png) | Step-by-step access flow |
+| [Session Timeline](diagrams/session-timeline.png) | Timeline from request to revocation |
+| [Multi-Account](diagrams/multi-account.png) | AWS Organization setup |
+| [Security Controls](diagrams/security-controls.png) | Security layers and monitoring |
+
+> For official AWS architecture diagrams, see the [AWS Security Blog post](https://aws.amazon.com/blogs/security/implementing-just-in-time-privileged-access-to-aws-with-microsoft-entra-and-aws-iam-identity-center/)
 
 ## Features
 
