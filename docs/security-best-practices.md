@@ -86,19 +86,34 @@ Set up alerts cho:
 ### Recommended Durations
 
 ```
-AWS Access Portal Session: 8 hours (default)
-Permission Set Session:    1-2 hours (for privileged)
-PIM Activation:           Match permission set session
+AWS Access Portal Session: 8 hours (default, range: 15 mins - 7 days)
+Permission Set Session:    1-2 hours (for privileged, max: 12 hours)
+PIM Activation:           1 hour (default 8 hours, range: 30 mins - 24 hours)
+```
+
+### Access Window Calculation (from AWS Blog)
+
+```
+Total Access Window = PIM Duration + SCIM Sync Delay + Permission Set Session
+
+Example:
+- PIM activation: 1 hour
+- SCIM sync: ~10 mins (can be up to 40 mins under throttling)
+- Permission set session: 1 hour
+- Total potential window: ~2-3 hours
 ```
 
 ### Session Termination
 
-⚠️ Active sessions không bị terminate khi PIM expires.
+⚠️ **Critical**: Active sessions are NOT terminated when PIM expires.
+
+> "Even after the Entra PIM group activation period expires, it can take up to 30 minutes for the user to lose access to applications, and in some cases, it can take up to an hour." - AWS Blog
 
 Mitigation:
 1. Set short permission set session duration
 2. Educate users to sign out
 3. Monitor for extended sessions
+4. Use shorter PIM activation durations for sensitive access
 
 ## Network Security
 

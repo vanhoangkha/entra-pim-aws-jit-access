@@ -139,15 +139,18 @@ resource "aws_cloudwatch_metric_alarm" "unusual_logins" {
 ```
 User activates PIM     → T+0
 SCIM sync completes    → T+2 to T+10 mins (typical)
-                       → T+40 mins (worst case)
+                       → T+40 mins (worst case, under throttling)
 User can access AWS    → After sync
 ```
+
+> "In most situations, group memberships are synchronized within 2–10 minutes, but can revert to the standard 40-minute interval if activity runs up against Entra PIM throttling limits." - AWS Blog
 
 ### ✅ DO: Handle throttling
 
 - Stagger activations across users
-- Avoid bulk activations
+- Avoid bulk activations (throttling occurs per 10-second period)
 - Monitor Entra provisioning logs
+- Initial sync is immediate, subsequent syncs every 40 minutes
 
 ---
 
