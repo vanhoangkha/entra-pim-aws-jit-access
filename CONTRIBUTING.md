@@ -1,28 +1,4 @@
 # Contributing
-
-Thank you for your interest in contributing!
-
-## How to Contribute
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## Guidelines
-
-- Follow existing code style and conventions
-- Update documentation for any changes
-- Test Terraform changes with `terraform validate` and `terraform fmt`
-- Keep commits atomic and well-described
-
-## Reporting Issues
-
-- Use GitHub Issues for bug reports and feature requests
-- Include steps to reproduce for bugs
-- Check existing issues before creating new ones
-
-## Questions?
-
-Open a GitHub Discussion or Issue.
+1. Fork repository
+2. Create feature branch  
+3. Submit Pull Request
