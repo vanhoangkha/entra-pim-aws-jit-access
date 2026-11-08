@@ -2,7 +2,7 @@
 
 ## 1. Permission Set Design
 
-### ✅ DO: Tách biệt theo function
+### DO: Tách biệt theo function
 
 ```
 AWS - EC2 Admin          → AmazonEC2FullAccess
@@ -11,13 +11,13 @@ AWS - Database Admin     → AmazonRDSFullAccess + AmazonDynamoDBFullAccess
 AWS - Network Admin      → AmazonVPCFullAccess
 ```
 
-### ❌ DON'T: Gộp chung permissions
+### DON'T: Gộp chung permissions
 
 ```
 AWS - Admin              → AdministratorAccess (quá rộng)
 ```
 
-### ✅ DO: Sử dụng conditions
+### DO: Sử dụng conditions
 
 ```json
 {
@@ -44,14 +44,14 @@ AWS - Admin              → AdministratorAccess (quá rộng)
 | Production Read | 4 hours | 2 hours | ~6.5 hours |
 | Development | 8 hours | 4 hours | ~12.5 hours |
 
-### ✅ DO: Match durations
+### DO: Match durations
 
 ```
 PIM Activation:     2 hours
 Permission Set:     1 hour  ← Shorter than PIM
 ```
 
-### ❌ DON'T: Long sessions cho privileged access
+### DON'T: Long sessions cho privileged access
 
 ```
 PIM Activation:     24 hours  ← Too long
@@ -73,7 +73,7 @@ Permission Set:     12 hours  ← Too long
 | Production | Admin | Manager + Security |
 | Production | Emergency | CISO |
 
-### ✅ DO: Configure approvers
+### DO: Configure approvers
 
 ```
 Primary Approver:    Direct Manager
@@ -134,7 +134,7 @@ resource "aws_cloudwatch_metric_alarm" "unusual_logins" {
 
 ## 6. SCIM Sync Considerations
 
-### ✅ DO: Plan for sync delays
+### DO: Plan for sync delays
 
 ```
 User activates PIM     → T+0
@@ -145,7 +145,7 @@ User can access AWS    → After sync
 
 > "In most situations, group memberships are synchronized within 2–10 minutes, but can revert to the standard 40-minute interval if activity runs up against Entra PIM throttling limits." - AWS Blog
 
-### ✅ DO: Handle throttling
+### DO: Handle throttling
 
 - Stagger activations across users
 - Avoid bulk activations (throttling occurs per 10-second period)

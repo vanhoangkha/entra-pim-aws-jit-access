@@ -23,15 +23,15 @@ Implementation of Just-in-Time (JIT) privileged access to AWS using Microsoft En
 
 ## Features
 
-- ✅ Time-bound access (1-24 hours)
-- ✅ Approval workflow (optional)
-- ✅ MFA enforcement
-- ✅ Justification tracking
-- ✅ Audit logging
-- ✅ Automatic provisioning via SCIM
-- ✅ Permissions boundary for privilege escalation prevention
-- ✅ CloudWatch monitoring (optional)
-- ✅ Terraform automation
+- Time-bound access (1-24 hours)
+- Approval workflow (optional)
+- MFA enforcement
+- Justification tracking
+- Audit logging
+- Automatic provisioning via SCIM
+- Permissions boundary for privilege escalation prevention
+- CloudWatch monitoring (optional)
+- Terraform automation
 
 ## Prerequisites
 
@@ -50,7 +50,7 @@ Implementation of Just-in-Time (JIT) privileged access to AWS using Microsoft En
 | Permission set session | 1 hour | 1 - 12 hours | Per permission set |
 | PIM activation duration | 8 hours | 30 mins - 24 hours | Per group |
 
-> ⚠️ **Important**: Active sessions are NOT terminated when PIM expires. Potential access window = PIM duration + sync delay (~10 mins) + session duration.
+> **Important**: Active sessions are NOT terminated when PIM expires. Potential access window = PIM duration + sync delay (~10 mins) + session duration.
 
 ## Quick Start
 
