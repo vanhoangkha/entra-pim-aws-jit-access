@@ -5,8 +5,8 @@
 ### Permission Set Design
 
 ```
-❌ Bad: Single "AdminAccess" for everything
-✅ Good: Separate permission sets per function
+Bad: Single "AdminAccess" for everything
+Good: Separate permission sets per function
 
 AWS - EC2 Admin      → EC2 only
 AWS - S3 Admin       → S3 only
@@ -105,7 +105,7 @@ Example:
 
 ### Session Termination
 
-⚠️ **Critical**: Active sessions are NOT terminated when PIM expires.
+**Critical**: Active sessions are NOT terminated when PIM expires.
 
 > "Even after the Entra PIM group activation period expires, it can take up to 30 minutes for the user to lose access to applications, and in some cases, it can take up to an hour." - AWS Blog
 

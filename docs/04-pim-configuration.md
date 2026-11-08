@@ -18,9 +18,9 @@
 | Setting | Recommended Value | Description |
 |---------|-------------------|-------------|
 | Activation maximum duration | 1-8 hours | Thời gian user được access |
-| Require justification | ✅ Yes | User phải giải thích lý do |
+| Require justification | Yes | User phải giải thích lý do |
 | Require ticket information | Optional | Link to ticket system |
-| Require MFA | ✅ Yes | Bắt buộc MFA khi activate |
+| Require MFA | Yes | Bắt buộc MFA khi activate |
 | Require approval | Optional | Cần approver cho sensitive access |
 
 ### Assignment Settings
